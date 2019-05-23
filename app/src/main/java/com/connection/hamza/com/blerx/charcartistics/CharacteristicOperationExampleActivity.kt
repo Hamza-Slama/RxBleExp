@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.connection.hamza.com.blerx.R
 import com.connection.hamza.com.blerx.SampleApplication
+import com.connection.hamza.com.blerx.util.disConnected
 import com.connection.hamza.com.blerx.util.hasProperty
 import com.connection.hamza.com.blerx.util.isConnected
 import com.connection.hamza.com.blerx.util.toHex
@@ -50,11 +51,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
 
     private lateinit var bleDevice: RxBleDevice
 
-
-    private val inputBytes: ByteArray
-        get() = write_input.text.toString().toByteArray()
-
-
     /*
     Client 2
      */
@@ -66,7 +62,7 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var connectionObservable2: Observable<RxBleConnection>
 
     private val connectionDisposable2 = CompositeDisposable()
-    //TODO : Add macAdress2 to connect
+    //TODO : Add macAdress 2 of BLE
     private val macAddress2 = ""
 
 
@@ -81,7 +77,7 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var connectionObservable3: Observable<RxBleConnection>
 
     private val connectionDisposable3 = CompositeDisposable()
-    //TODO : Add macAdress3 to connect
+    //TODO : Add macAdress 3 of BLE
     private val macAddress3 = ""
 
 
@@ -97,7 +93,7 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var connectionObservable4: Observable<RxBleConnection>
 
     private val connectionDisposable4 = CompositeDisposable()
-    //TODO : Add macAdress4 to connect
+    //TODO : Add macAdress 4 of BLE
     private val macAddress4 = ""
 
     /**
@@ -112,7 +108,7 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var connectionObservable5: Observable<RxBleConnection>
 
     private val connectionDisposable5 = CompositeDisposable()
-    //TODO : Add macAdress5 to connect
+    //TODO : Add macAdress 5 of BLE
     private val macAddress5 = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -151,8 +147,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
             onConnectToggleClick4()
             onConnectToggleClick5()
         }
-        read.setOnClickListener { onReadClick() }
-        write.setOnClickListener { onWriteClick() }
         notify.setOnClickListener {
             onNotifyClick()
             onNotifyClick2()
@@ -189,31 +183,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
         }
     }
 
-    private fun onReadClick() {
-        if (bleDevice.isConnected) {
-            connectionObservable
-                .firstOrError()
-                .flatMap { it.readCharacteristic(characteristicUuid) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ bytes ->
-                    read_output.text = String(bytes)
-                    read_hex_output.text = bytes?.toHex()
-                    write_input.setText(bytes?.toHex())
-                }, { onReadFailure(it) })
-                .let { connectionDisposable.add(it) }
-        }
-    }
-
-    private fun onWriteClick() {
-        if (bleDevice.isConnected) {
-            connectionObservable
-                .firstOrError()
-                .flatMap { it.writeCharacteristic(characteristicUuid, inputBytes) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ onWriteSuccess() }, { onWriteFailure(it) })
-                .let { connectionDisposable.add(it) }
-        }
-    }
 
     private fun onNotifyClick() {
         if (bleDevice.isConnected) {
@@ -221,8 +190,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
                 .flatMap {
                     it.setupNotification(characteristicUuid) }
                 .doOnNext { runOnUiThread { notificationHasBeenSetUp() } }
-                // we have to flatmap in order to get the actual notification observable
-                // out of the enclosing observable, which only performed notification setup
                 .flatMap { it }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -239,8 +206,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
                 .flatMap {
                     it.setupNotification(characteristicUuid2) }
                 .doOnNext { runOnUiThread { notificationHasBeenSetUp() } }
-                // we have to flatmap in order to get the actual notification observable
-                // out of the enclosing observable, which only performed notification setup
                 .flatMap { it }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -257,8 +222,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
                     .flatMap {
                         it.setupNotification(characteristicUuid3) }
                     .doOnNext { runOnUiThread { notificationHasBeenSetUp() } }
-                    // we have to flatmap in order to get the actual notification observable
-                    // out of the enclosing observable, which only performed notification setup
                     .flatMap { it }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
@@ -275,8 +238,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
                     .flatMap {
                         it.setupNotification(characteristicUuid4) }
                     .doOnNext { runOnUiThread { notificationHasBeenSetUp() } }
-                    // we have to flatmap in order to get the actual notification observable
-                    // out of the enclosing observable, which only performed notification setup
                     .flatMap { it }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
@@ -293,8 +254,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
                     .flatMap {
                         it.setupNotification(characteristicUuid5) }
                     .doOnNext { runOnUiThread { notificationHasBeenSetUp() } }
-                    // we have to flatmap in order to get the actual notification observable
-                    // out of the enclosing observable, which only performed notification setup
                     .flatMap { it }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({
@@ -306,28 +265,15 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     }
 
     private fun onConnectionFailure(throwable: Throwable) {
-        //showSnackbarShort("Connection error: $throwable")
         updateUI(null)
     }
 
-    private fun onReadFailure(throwable: Throwable){
-      //  showSnackbarShort("Read error: $throwable")
-    }
 
-    private fun onWriteSuccess() {
-//        showSnackbarShort("Write success")
-    }
 
-    private fun onWriteFailure(throwable: Throwable) {
-        //showSnackbarShort("Write error: $throwable")}
-    }
     private fun onNotificationReceived(bytes: ByteArray,name : String){
-        Log.d("rec_byte"," $name , ${bytes.toHex()}")
-        Log.d("rec_byte"," $name , ${bytes.size}")
-        if (bytes.size == 20 ) {
-            setUp20Paq(bytes)
-        }
-       // showSnackbarShort("Change: ${bytes.toHex()}")
+//        if (bytes.size == 20 ) {
+//            setUp20Paq(bytes)
+//        }
     }
 
     private fun onNotificationSetupFailure(throwable: Throwable) {
@@ -350,14 +296,10 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private fun updateUI(characteristic: BluetoothGattCharacteristic?) {
         if (characteristic == null) {
             connect.setText(R.string.button_connect)
-            read.isEnabled = false
-            write.isEnabled = false
             notify.isEnabled = false
         } else {
             connect.setText(R.string.button_disconnect)
             with(characteristic) {
-                read.isEnabled = hasProperty(BluetoothGattCharacteristic.PROPERTY_READ)
-                write.isEnabled = hasProperty(BluetoothGattCharacteristic.PROPERTY_WRITE)
                 notify.isEnabled = hasProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
             }
         }
@@ -391,8 +333,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
                         service.characteristics.map { characteristic ->
                             if (characteristic.isNotifiable){
                                 characteristicUuid2= characteristic.uuid
-                                //startActivity(CharacteristicOperationExampleActivity.newInstance(this, macAddress2, characteristic.uuid))
-                                //finish()
                                 Log.d("rec_byte","macAdress2 =  $macAddress2 UUID 2=  ${characteristicUuid2}")
                             }
                         }
@@ -608,41 +548,6 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
 
 
 
-    /**
-     * Common
-     */
 
-    fun setUp20Paq(data : ByteArray) {
-        var nbrPaquet = 20
-        val time1: Int
-        val deltaTimes = IntArray(6)
-        val val1 = IntArray(6)
-        val val2 = IntArray(6)
-
-        time1 = data[0].toInt() and 0xFF shl 12 or (data[1].toInt() and 0xFF shl 4) or (data[2].toInt() and 0xF0 shr 4)
-        deltaTimes[0] = time1
-        var iPaq = 2
-        for (i in 0..5) {
-            // 4 bits
-            if (i > 0) deltaTimes[i] = (data[iPaq].toInt() and 0xFF shr 4) + deltaTimes[i - 1]
-            // 10 bits = 4 bits (paq[i]) + 6 bits (paq[i+1])
-            val1[i] = data[iPaq].toInt() and 0xF shl 6 or (data[iPaq + 1].toInt() and 0xFC shr 2)
-            //2 bits (paq[i+1]) + 8 bits (paq[i+2])
-            val2[i] = data[iPaq + 1].toInt() and 0x3 shl 8 or (data[iPaq + 2].toInt() and 0xFF)
-            iPaq += 3
-            // Log.d("Enregistrement_bleTAGE","deltaTimes ["+i+"] = "+deltaTimes[i]);
-
-        }
-
-        for (i in 0..5) {
-
-            Log.d("Enregistrement_bleTAGE","deltatimes ["+i+"] = "+deltaTimes[i] )
-            Log.d("Enregistrement_bleTAGE","val1 ["+i+"] = "+val1[i] )
-            Log.d("Enregistrement_bleTAGE","val2 ["+i+"] = "+val2[i] )
-        }
-        intent.putExtra("deltaTimes", deltaTimes)
-        intent.putExtra("val1", val1)
-        intent.putExtra("val2", val2)
-    }
 
 }

@@ -26,7 +26,8 @@
         </intent-filter>
         </activity>
 
-        <activity android:name=".DeviceActivity">
+        <activity android:name=".DeviceActivity"
+            android:theme="@style/AppThemeNoAction">
 
         </activity>
         <activity android:name=".charcartistics.CharacteristicOperationExampleActivity">

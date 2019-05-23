@@ -8,3 +8,5 @@ import com.polidea.rxandroidble2.RxBleDevice
  */
 internal val RxBleDevice.isConnected: Boolean
     get() = connectionState == RxBleConnection.RxBleConnectionState.CONNECTED
+internal val RxBleDevice.disConnected: Boolean
+    get() = connectionState == RxBleConnection.RxBleConnectionState.DISCONNECTED
