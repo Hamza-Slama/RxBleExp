@@ -29,7 +29,7 @@ class DeviceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_device)
         macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)
         bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress)
-        supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
+        //supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
         onConnectToggleClick()
     }
 
