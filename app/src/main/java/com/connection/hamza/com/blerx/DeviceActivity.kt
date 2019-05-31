@@ -37,9 +37,7 @@ class DeviceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
-       // macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)
         macAddress = (intent!!.getStringArrayExtra(EXTRA_MAC_ADDRESS))
-
         Log.d("recbyte","Set arrayOfMacAdress  From Device= "+(Arrays.toString(macAddress)))
 
         sensorName = (intent!!.getStringArrayExtra(EXTRA_SENSOR_NAME))
@@ -47,36 +45,7 @@ class DeviceActivity : AppCompatActivity() {
         sizeArray = (intent!!.getIntExtra(EXTRA_SIZE,0))
         bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress[0])
        // supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
-        onConnectToggleClick()
+        startActivity(CharacteristicOperationExampleActivity.newInstance(this, macAddress, sensorName ,  sizeArray))
     }
-
-    @SuppressLint("CheckResult")
-    private fun onConnectToggleClick() {
-        Log.d("Logging","THIS IS FROM onConnecte Methos")
-        bleDevice.establishConnection(false)
-                .flatMapSingle { it.discoverServices() }
-                .take(1) // Disconnect automatically after discovery
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {}
-                .doFinally {}
-                .subscribe({
-                    it.bluetoothGattServices.flatMap {service ->
-                        service.characteristics.map { characteristic ->
-                            if (characteristic.isNotifiable){
-                                c= characteristic.uuid
-                                startActivity(CharacteristicOperationExampleActivity.newInstance(this, macAddress, characteristic.uuid , sizeArray))
-                                finish()
-                                Log.d("DALIYO","macAdress =  $macAddress UUID =  ${service.uuid}")
-                            }
-                        }
-                    }
-                }, {
-
-                })
-
-    }
-
-    private val BluetoothGattCharacteristic.isNotifiable: Boolean
-        get() = properties and BluetoothGattCharacteristic.PROPERTY_NOTIFY != 0
 
 }

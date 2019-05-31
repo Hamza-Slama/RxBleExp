@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.connection.hamza.com.blerx.DeviceActivity
 import com.connection.hamza.com.blerx.R
 import com.connection.hamza.com.blerx.SampleApplication
-import com.connection.hamza.com.blerx.charcartistics.CharacteristicOperationExampleActivity
+
 import com.connection.hamza.com.blerx.util.isLocationPermissionGranted
 import com.connection.hamza.com.blerx.util.requestLocationPermission
 import com.connection.hamza.com.blerx.util.showError
@@ -30,12 +30,9 @@ class ScanActivity : AppCompatActivity() {
     private val rxBleClient = SampleApplication.rxBleClient
 
     private var scanDisposable: Disposable? = null
-    private lateinit var bleDevice: RxBleDevice
-private lateinit var macAddress: Array<String>
     //TODO : Add your Sensor Name to filter BLE
     private var sensorName = ""
-    private val resultsAdapter =
-            ScanResultsAdapter {}
+    private val resultsAdapter = ScanResultsAdapter {}
 
     private var hasClickedScan = false
 
@@ -48,7 +45,6 @@ private lateinit var macAddress: Array<String>
         configureResultList()
         scan_toggle_btn.setOnClickListener { onScanToggleClick() }
         onScanToggleClick()
-
         btn_lunch_activity.setOnClickListener {
             val arrayOfMacAdress = Array<String>(resultsAdapter.setOfMacAdress.size){""}
             resultsAdapter.setOfMacAdress.toArray(arrayOfMacAdress)
@@ -122,32 +118,6 @@ private lateinit var macAddress: Array<String>
         if (throwable is BleScanException) showError(throwable)
     }
 
-    private fun onConnectToggleClick() {
-        Log.d("Logging","THIS IS FROM onConnecte Methos")
-        bleDevice.establishConnection(false)
-                .flatMapSingle { it.discoverServices() }
-                .take(1) // Disconnect automatically after discovery
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {}
-                .doFinally {}
-                .subscribe({
-                    it.bluetoothGattServices.flatMap {service ->
-                        service.characteristics.map { characteristic ->
-                            if (characteristic.isNotifiable){
-                                startActivity(CharacteristicOperationExampleActivity.newInstance(this, macAddress, characteristic.uuid,0))
-                               // Log.d("DALIYO","macAdress =  $macAddress UUID =  ${service.uuid}")
-                            }
-
-                        }
-                    }
-
-                }, {
-
-                })
-                .let {
-
-                }
-    }
 
 
 
