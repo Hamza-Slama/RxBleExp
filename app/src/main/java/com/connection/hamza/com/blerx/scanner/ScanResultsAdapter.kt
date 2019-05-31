@@ -1,5 +1,6 @@
 package com.connection.hamza.com.blerx.scanner
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,8 @@ internal class ScanResultsAdapter(
 
 
     var arrList = ArrayList<String>()
-    val setOfMacAdress = HashSet<String>()
-    val setOfSensorName = HashSet<String>()
+    var setOfMacAdress = HashSet<String>()
+    var setOfSensorNameA = ArrayList<String>()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val device: TextView = itemView.findViewById(android.R.id.text1)
@@ -60,11 +61,12 @@ internal class ScanResultsAdapter(
             holder.itemView.setOnClickListener { onClickListener(this) }
             if (holder.check.isChecked){
                 setOfMacAdress.add(bleDevice.macAddress)
-                setOfSensorName.add(bleDevice.name!!)
+                setOfSensorNameA.add(bleDevice.name!!)
             }
             else {
                 setOfMacAdress.remove(bleDevice.macAddress)
-                setOfSensorName.remove(bleDevice.name)
+                setOfSensorNameA.remove(bleDevice.name!!)
+               // setOfSensorName.remove(bleDevice.name!!)
             }
         }
     }

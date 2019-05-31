@@ -14,19 +14,22 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private const val EXTRA_MAC_ADDRESS = "extra_mac_address"
+private const val EXTRA_SENSOR_NAME = "extra_sensor_name"
 private const val EXTRA_SIZE = "extra_mac_address_size"
 
 class DeviceActivity : AppCompatActivity() {
 
     companion object {
-        fun newInstance(context: Context, macAddress: Array<String> , size : Int): Intent =
+        fun newInstance(context: Context, macAddress: Array<String>, sensorName: Array<String> , size : Int): Intent =
             Intent(context, DeviceActivity::class.java).apply {
                 putExtra(EXTRA_MAC_ADDRESS, macAddress)
+                putExtra(EXTRA_SENSOR_NAME, sensorName)
                 putExtra(EXTRA_SIZE, size)
             }
     }
 
     private lateinit var macAddress: Array<String>
+    private lateinit var sensorName: Array<String>
     private lateinit var bleDevice: RxBleDevice
     private lateinit var c : UUID
 
@@ -36,6 +39,11 @@ class DeviceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_device)
        // macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)
         macAddress = (intent!!.getStringArrayExtra(EXTRA_MAC_ADDRESS))
+
+        Log.d("recbyte","Set arrayOfMacAdress  From Device= "+(Arrays.toString(macAddress)))
+
+        sensorName = (intent!!.getStringArrayExtra(EXTRA_SENSOR_NAME))
+        Log.d("recbyte","Set arrayOfMacAdress  From Device= "+(Arrays.toString(sensorName)))
         sizeArray = (intent!!.getIntExtra(EXTRA_SIZE,0))
         bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress[0])
        // supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)

@@ -52,12 +52,16 @@ private lateinit var macAddress: Array<String>
         btn_lunch_activity.setOnClickListener {
             val arrayOfMacAdress = Array<String>(resultsAdapter.setOfMacAdress.size){""}
             resultsAdapter.setOfMacAdress.toArray(arrayOfMacAdress)
-            Log.d("recbyte","Set = "+(Arrays.toString(arrayOfMacAdress)))
+            Log.d("recbyte","Set arrayOfMacAdress = "+(Arrays.toString(arrayOfMacAdress)))
 
-            val arrayOfSensorName = Array<String>(resultsAdapter.setOfSensorName.size){""}
-            resultsAdapter.setOfMacAdress.toArray(arrayOfMacAdress)
-            Log.d("recbyte","Set = "+(Arrays.toString(arrayOfMacAdress)))
-            startActivity(DeviceActivity.newInstance(this, arrayOfMacAdress , arrayOfMacAdress.size))
+
+            val array = Array<String>(resultsAdapter.setOfSensorNameA.size){""}
+            resultsAdapter.setOfSensorNameA.toArray(array)
+            val set = HashSet(Arrays.asList(*array))
+            val setOfSensorNameA = Array<String>(set.size){""}
+            set.toArray(setOfSensorNameA)
+            Log.d("recbyte","Arra name  = "+(Arrays.toString(setOfSensorNameA)))
+            startActivity(DeviceActivity.newInstance(this, arrayOfMacAdress ,setOfSensorNameA , arrayOfMacAdress.size))
         }
     }
 
