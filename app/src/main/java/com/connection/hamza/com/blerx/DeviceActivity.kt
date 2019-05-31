@@ -39,6 +39,11 @@ class DeviceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_device)
         macAddress = (intent!!.getStringArrayExtra(EXTRA_MAC_ADDRESS))
         Log.d("recbyte","Set arrayOfMacAdress  From Device= "+(Arrays.toString(macAddress)))
+        macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)
+        bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress)
+        //supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
+        onConnectToggleClick()
+    }
 
         sensorName = (intent!!.getStringArrayExtra(EXTRA_SENSOR_NAME))
         Log.d("recbyte","Set arrayOfMacAdress  From Device= "+(Arrays.toString(sensorName)))
