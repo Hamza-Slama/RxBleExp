@@ -3,8 +3,10 @@ package com.connection.hamza.com.blerx.scanner
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.connection.hamza.com.blerx.R
 
 import com.polidea.rxandroidble2.scan.ScanResult
 
@@ -12,9 +14,15 @@ internal class ScanResultsAdapter(
     private val onClickListener: (ScanResult) -> Unit
 ) : RecyclerView.Adapter<ScanResultsAdapter.ViewHolder>() {
 
+
+    var arrList = ArrayList<String>()
+    val setOfMacAdress = HashSet<String>()
+    val setOfSensorName = HashSet<String>()
+
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val device: TextView = itemView.findViewById(android.R.id.text1)
         val rssi: TextView = itemView.findViewById(android.R.id.text2)
+        val check : CheckBox = itemView.findViewById(R.id.checkbox_scan_ble)
     }
 
     private val data = mutableListOf<ScanResult>()
@@ -50,11 +58,19 @@ internal class ScanResultsAdapter(
             holder.device.text = String.format("%s (%s)", bleDevice.macAddress, bleDevice.name)
             holder.rssi.text = String.format("RSSI: %d", rssi)
             holder.itemView.setOnClickListener { onClickListener(this) }
+            if (holder.check.isChecked){
+                setOfMacAdress.add(bleDevice.macAddress)
+                setOfSensorName.add(bleDevice.name!!)
+            }
+            else {
+                setOfMacAdress.remove(bleDevice.macAddress)
+                setOfSensorName.remove(bleDevice.name)
+            }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         LayoutInflater.from(parent.context)
-            .inflate(android.R.layout.two_line_list_item, parent, false)
+            .inflate(R.layout.layout_list_of_dispo_ble, parent, false)
             .let { ViewHolder(it) }
 }

@@ -23,6 +23,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main2.*
+import java.util.*
 
 class ScanActivity : AppCompatActivity() {
 
@@ -30,12 +31,11 @@ class ScanActivity : AppCompatActivity() {
 
     private var scanDisposable: Disposable? = null
     private lateinit var bleDevice: RxBleDevice
-// KAYAK :  F6:B9:90:6F:67:32
-    private var macAddress =""
+private lateinit var macAddress: Array<String>
     //TODO : Add your Sensor Name to filter BLE
     private var sensorName = ""
     private val resultsAdapter =
-            ScanResultsAdapter { startActivity(DeviceActivity.newInstance(this, it.bleDevice.macAddress)) }
+            ScanResultsAdapter {}
 
     private var hasClickedScan = false
 
@@ -48,6 +48,17 @@ class ScanActivity : AppCompatActivity() {
         configureResultList()
         scan_toggle_btn.setOnClickListener { onScanToggleClick() }
         onScanToggleClick()
+
+        btn_lunch_activity.setOnClickListener {
+            val arrayOfMacAdress = Array<String>(resultsAdapter.setOfMacAdress.size){""}
+            resultsAdapter.setOfMacAdress.toArray(arrayOfMacAdress)
+            Log.d("recbyte","Set = "+(Arrays.toString(arrayOfMacAdress)))
+
+            val arrayOfSensorName = Array<String>(resultsAdapter.setOfSensorName.size){""}
+            resultsAdapter.setOfMacAdress.toArray(arrayOfMacAdress)
+            Log.d("recbyte","Set = "+(Arrays.toString(arrayOfMacAdress)))
+            startActivity(DeviceActivity.newInstance(this, arrayOfMacAdress , arrayOfMacAdress.size))
+        }
     }
 
     private fun configureResultList() {
@@ -119,7 +130,7 @@ class ScanActivity : AppCompatActivity() {
                     it.bluetoothGattServices.flatMap {service ->
                         service.characteristics.map { characteristic ->
                             if (characteristic.isNotifiable){
-                                startActivity(CharacteristicOperationExampleActivity.newInstance(this, macAddress, characteristic.uuid))
+                                startActivity(CharacteristicOperationExampleActivity.newInstance(this, macAddress, characteristic.uuid,0))
                                // Log.d("DALIYO","macAdress =  $macAddress UUID =  ${service.uuid}")
                             }
 

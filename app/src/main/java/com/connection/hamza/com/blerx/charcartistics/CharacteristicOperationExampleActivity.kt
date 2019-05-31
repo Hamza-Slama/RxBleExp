@@ -31,13 +31,17 @@ private const val EXTRA_MAC_ADDRESS = "extra_mac_address"
 
 private const val EXTRA_CHARACTERISTIC_UUID = "extra_uuid"
 
+private const val EXTRA_SIZE = "extra_mac_address_size"
+
+
 class CharacteristicOperationExampleActivity : AppCompatActivity() {
 
     companion object {
-        fun newInstance(context: Context, macAddress: String, uuid: UUID) =
+        fun newInstance(context: Context, macAddress: Array<String>, uuid: UUID , size : Int) =
             Intent(context, CharacteristicOperationExampleActivity::class.java).apply {
                 putExtra(EXTRA_MAC_ADDRESS, macAddress)
                 putExtra(EXTRA_CHARACTERISTIC_UUID, uuid)
+                putExtra(EXTRA_SIZE, size   )
             }
     }
 
@@ -62,8 +66,8 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var connectionObservable2: Observable<RxBleConnection>
 
     private val connectionDisposable2 = CompositeDisposable()
-    //TODO : Add macAdress 2 of BLE
-    private val macAddress2 = ""
+    //Kayak -- 20
+    private val macAddress2 = "F6:B9:90:6F:67:32"
 
 
     /**
@@ -77,8 +81,8 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var connectionObservable3: Observable<RxBleConnection>
 
     private val connectionDisposable3 = CompositeDisposable()
-    //TODO : Add macAdress 3 of BLE
-    private val macAddress3 = ""
+    //Tir 14 -- 18
+    private val macAddress3 = "EF:43:19:25:D2:1D"
 
 
     /**
@@ -93,8 +97,8 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var connectionObservable4: Observable<RxBleConnection>
 
     private val connectionDisposable4 = CompositeDisposable()
-    //TODO : Add macAdress 4 of BLE
-    private val macAddress4 = ""
+    //Crampon -- 20
+    private val macAddress4 = "E0:0C:1D:77:8F:13"
 
     /**
      * Client 5
@@ -108,22 +112,24 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
     private lateinit var connectionObservable5: Observable<RxBleConnection>
 
     private val connectionDisposable5 = CompositeDisposable()
-    //TODO : Add macAdress 5 of BLE
-    private val macAddress5 = ""
+    //PPM104
+    private val macAddress5 = "EE:05:9B:04:37:A2"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_save)
 
-        val macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)
+        val  macAddress = (intent!!.getStringArrayExtra(EXTRA_MAC_ADDRESS))
+        val size = intent.getIntExtra(EXTRA_SIZE,0)
+        Log.d("recbyte","size = $size")
         characteristicUuid = intent.getSerializableExtra(EXTRA_CHARACTERISTIC_UUID) as UUID
         Log.d("TAG","UUID = $characteristicUuid")
-        bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress)
+        bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress[0])
         connectionObservable = prepareConnectionObservable()
-        supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
+        supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress[0])
 
 
-        bleDevice2 = SampleApplication.rxBleClient.getBleDevice(macAddress2)
+       /*bleDevice2 = SampleApplication.rxBleClient.getBleDevice(macAddress2)
         onConnectToggleClickGetChar()
         connectionObservable2 = prepareConnectionObservable2()
 
@@ -132,27 +138,27 @@ class CharacteristicOperationExampleActivity : AppCompatActivity() {
         connectionObservable3 = prepareConnectionObservable3()
 
 
-        bleDevice4 = SampleApplication.rxBleClient.getBleDevice(macAddress4)
+        /*bleDevice4 = SampleApplication.rxBleClient.getBleDevice(macAddress4)
         onConnectToggleClickGetChar4()
-        connectionObservable4 = prepareConnectionObservable4()
+        connectionObservable4 = prepareConnectionObservable4()*/
 
         bleDevice5 = SampleApplication.rxBleClient.getBleDevice(macAddress5)
         onConnectToggleClickGetChar5()
-        connectionObservable5 = prepareConnectionObservable5()
+        connectionObservable5 = prepareConnectionObservable5()*/
 
         connect.setOnClickListener {
             onConnectToggleClick()
-            onConnectToggleClick2()
+            /*onConnectToggleClick2()
             onConnectToggleClick3()
-            onConnectToggleClick4()
-            onConnectToggleClick5()
+            //onConnectToggleClick4()
+            onConnectToggleClick5()*/
         }
         notify.setOnClickListener {
             onNotifyClick()
-            onNotifyClick2()
+           /* onNotifyClick2()
             onNotifyClick3()
-            onNotifyClick4()
-            onNotifyClick5()
+           // onNotifyClick4()
+            onNotifyClick5()*/
         }
     }
 
