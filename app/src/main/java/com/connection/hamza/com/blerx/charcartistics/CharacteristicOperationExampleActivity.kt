@@ -9,14 +9,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.connection.hamza.com.blerx.R
 import com.connection.hamza.com.blerx.SampleApplication
-import com.connection.hamza.com.blerx.util.disConnected
 import com.connection.hamza.com.blerx.util.hasProperty
 import com.connection.hamza.com.blerx.util.isConnected
 import com.connection.hamza.com.blerx.util.toHex
 import com.jakewharton.rx.ReplayingShare
 import com.polidea.rxandroidble2.RxBleConnection
 import com.polidea.rxandroidble2.RxBleDevice
-
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -27,8 +25,6 @@ import kotlin.collections.ArrayList
 
 
 private const val EXTRA_MAC_ADDRESS = "extra_mac_address"
-
-private const val EXTRA_CHARACTERISTIC_UUID = "extra_uuid"
 
 private const val EXTRA_SIZE = "extra_mac_address_size"
 

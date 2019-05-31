@@ -1,7 +1,5 @@
 package com.connection.hamza.com.blerx
 
-import android.annotation.SuppressLint
-import android.bluetooth.BluetoothGattCharacteristic
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,9 +7,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.connection.hamza.com.blerx.charcartistics.CharacteristicOperationExampleActivity
 import com.polidea.rxandroidble2.RxBleDevice
-import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.*
-import kotlin.collections.ArrayList
 
 private const val EXTRA_MAC_ADDRESS = "extra_mac_address"
 private const val EXTRA_SENSOR_NAME = "extra_sensor_name"
@@ -39,17 +35,11 @@ class DeviceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_device)
         macAddress = (intent!!.getStringArrayExtra(EXTRA_MAC_ADDRESS))
         Log.d("recbyte","Set arrayOfMacAdress  From Device= "+(Arrays.toString(macAddress)))
-        macAddress = intent.getStringExtra(EXTRA_MAC_ADDRESS)
-        bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress)
-        //supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
-        onConnectToggleClick()
-    }
-
+        macAddress = intent.getStringArrayExtra(EXTRA_MAC_ADDRESS)
         sensorName = (intent!!.getStringArrayExtra(EXTRA_SENSOR_NAME))
         Log.d("recbyte","Set arrayOfMacAdress  From Device= "+(Arrays.toString(sensorName)))
         sizeArray = (intent!!.getIntExtra(EXTRA_SIZE,0))
         bleDevice = SampleApplication.rxBleClient.getBleDevice(macAddress[0])
-       // supportActionBar!!.subtitle = getString(R.string.mac_address, macAddress)
         startActivity(CharacteristicOperationExampleActivity.newInstance(this, macAddress, sensorName ,  sizeArray))
     }
 

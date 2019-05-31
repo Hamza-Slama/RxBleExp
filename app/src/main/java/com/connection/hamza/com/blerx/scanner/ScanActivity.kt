@@ -1,24 +1,21 @@
 package com.connection.hamza.com.blerx.scanner
 
 //import android.support.v7.app.AppCompatActivity
+
 import android.bluetooth.BluetoothGattCharacteristic
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-
 import com.connection.hamza.com.blerx.DeviceActivity
 import com.connection.hamza.com.blerx.R
 import com.connection.hamza.com.blerx.SampleApplication
-
 import com.connection.hamza.com.blerx.util.isLocationPermissionGranted
 import com.connection.hamza.com.blerx.util.requestLocationPermission
 import com.connection.hamza.com.blerx.util.showError
-import com.polidea.rxandroidble2.RxBleDevice
 import com.polidea.rxandroidble2.exceptions.BleScanException
 import com.polidea.rxandroidble2.scan.ScanFilter
 import com.polidea.rxandroidble2.scan.ScanResult
 import com.polidea.rxandroidble2.scan.ScanSettings
-
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

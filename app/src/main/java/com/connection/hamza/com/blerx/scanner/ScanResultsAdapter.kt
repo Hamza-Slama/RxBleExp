@@ -1,6 +1,5 @@
 package com.connection.hamza.com.blerx.scanner
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +7,12 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.connection.hamza.com.blerx.R
-
 import com.polidea.rxandroidble2.scan.ScanResult
 
 internal class ScanResultsAdapter(
     private val onClickListener: (ScanResult) -> Unit
 ) : RecyclerView.Adapter<ScanResultsAdapter.ViewHolder>() {
 
-
-    var arrList = ArrayList<String>()
     var setOfMacAdress = HashSet<String>()
     var setOfSensorNameA = ArrayList<String>()
 
@@ -66,7 +62,6 @@ internal class ScanResultsAdapter(
             else {
                 setOfMacAdress.remove(bleDevice.macAddress)
                 setOfSensorNameA.remove(bleDevice.name!!)
-               // setOfSensorName.remove(bleDevice.name!!)
             }
         }
     }
