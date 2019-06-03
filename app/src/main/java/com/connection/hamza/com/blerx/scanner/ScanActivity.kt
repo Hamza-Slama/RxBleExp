@@ -46,8 +46,6 @@ class ScanActivity : AppCompatActivity() {
             val arrayOfMacAdress = Array<String>(resultsAdapter.setOfMacAdress.size){""}
             resultsAdapter.setOfMacAdress.toArray(arrayOfMacAdress)
             Log.d("recbyte","Set arrayOfMacAdress = "+(Arrays.toString(arrayOfMacAdress)))
-
-
             val array = Array<String>(resultsAdapter.setOfSensorNameA.size){""}
             resultsAdapter.setOfSensorNameA.toArray(array)
             val set = HashSet(Arrays.asList(*array))
